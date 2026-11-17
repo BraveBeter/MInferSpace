@@ -1,0 +1,76 @@
+# Benchmark 结果
+
+这里保存统一评测客户端的运行结果，按“策略 → 每次运行”分组。每次运行目录内的产物沿用 [benchmark-client 的原生约定](../benchmark-client/README.md)。
+
+## 组织与命名
+
+```text
+benchmark-results/
+├── README.md
+├── OPT-0000/                         # 初始基线
+│   └── 20261117T120000Z-e2e-baseline/
+└── OPT-0001/                         # 同一策略的各次评测
+    ├── 20261118T100000Z-e2e-baseline/
+    ├── 20261118T110000Z-e2e-candidate/
+    └── 20261119T090000Z-codec-candidate/
+```
+
+以上目录仅为示例，目前没有评测记录。策略目录与运行目录在实际评测时创建。
+
+- 第一层使用 `OPT-0000`、`OPT-0001` 等策略编号，对应策略文档。`OPT-0000` 用于初始基线；每项策略可以包含自己的基线和多个候选运行。
+- 第二层使用 `<UTC开始时间>-<评测类型>-<角色>`，例如 `20261118T110000Z-e2e-candidate`。时间精确到秒，类型使用 `e2e` 或 `codec`，角色使用 `baseline` 或 `candidate`。
+- 名称冲突时追加 `-02` 等后缀；重新运行使用新目录，已有结果继续保留。E2E 的显式 `--resume` 按客户端规则在原目录恢复，属于同一次运行。
+- 日期写入运行名，同一策略跨天的结果仍放在同一个策略目录中。
+- 一次客户端运行可以包含多个数据集、模态、并发和重复轮次，由客户端内部管理；不按内部轮次另建外层运行目录。
+
+## 输出目录
+
+将最内层运行目录传给 `--output-dir`。例如，从工作区根目录执行时，参数为：
+
+```text
+--output-dir benchmark-results/OPT-0001/20261118T110000Z-e2e-candidate
+```
+
+CLI 的相对输出路径以执行命令时的工作目录为基准。客户端支持创建多级父目录；无需预建策略或运行目录。
+
+首次推理前，运行目录应不存在、为空，或仅含 `execution/` 目录。顶层的本 README 和策略层的资料不属于运行目录，不受此检查影响。不要提前在运行目录根下写 README、创建 `analysis/` 或放其他文件。
+
+推理、离线评分和单次运行报告使用同一个 `--output-dir`，评分时复用已冻结的生成输出。
+
+## 每次运行的产物
+
+以下为原生产物的职责说明，不是要求手动创建的文件清单。具体文件随评测类型和执行阶段产生，以所用客户端版本为准。
+
+| 产物 | 职责 |
+| --- | --- |
+| `summary.md` | 客户端生成的结果阅读入口；Codec 沿用自己的摘要结构 |
+| `manifest.json` | 客户端记录的代码身份、运行契约及执行状态 |
+| `selection.json` | E2E 冻结选样，用于后续候选复用 |
+| `plan.json`、`inputs/`、`warmup-inputs/`、`cells/` | E2E 的计划、冻结输入、分组输出、预热和恢复尝试 |
+| `performance.json`、`performance-averages.json`、`requests.jsonl` | E2E 原生性能与请求记录 |
+| `quality.json`、`quality.md`、`quality/` | 按类型和评分阶段产生的质量结果及证据 |
+| `samples.json`、`generation.json`、`codes/`、`audio/` | Codec 的冻结样本及原生重建产物 |
+| `execution/` | 执行命令、配置、环境和日志；Codec 也在这里生成执行材料 |
+| `analysis/` | 运行建立后的人工详细分析或客户端生成的分析产物 |
+
+工作区不另行要求 `run.yaml`、`metrics.json` 或每次运行的 README。被测服务身份按客户端支持的方式提供：E2E 使用 `--deployment`，格式参考 [deployment 示例](../benchmark-client/examples/deployment.example.json)；Codec 按其配置记录身份。实际服务进程加载的代码应与所填身份一致。
+
+`summary.md` 会被报告命令重新生成，人工说明写在 `analysis/` 中，并链接原始证据。凭据通过外部环境传入，执行材料中保留所用变量名，不保存凭据值。
+
+## 基线复用与对比
+
+- 已有基线可跨策略引用，保留在其原目录；在策略文档和下方索引中链接该次运行，无需复制结果。重新测量才创建新目录。
+- E2E 候选优先通过 `--selection` 复用基线的 `selection.json`。数据、生成参数和客户端指标实现等可比条件按原生契约检查，不以目录名相同代替可比性验证。
+- E2E 对比使用 `e2e report --output-dir <候选目录> --baseline <基线目录>`，客户端在候选目录生成 `comparison.md` 和 `comparison.json`。
+- Codec 的样本范围、评分和对比遵循 [Codec 协议](../benchmark-client/CODEC_ONLY.md)。Codec 不支持隐式恢复；使用比较配置生成的汇总报告另放在同一策略下的新目录，例如 `20261119T100000Z-codec-comparison/`。该目录是对比报告，不登记为新的推理运行。
+- 失败、中断、预算耗尽和未评分的结果继续保留；状态以客户端记录为准。正式 benchmark 与 profile 分开运行。
+
+## 策略索引
+
+目前没有评测记录。开始评测后按策略更新下表，链接到策略文档及关键运行的 `summary.md`；E2E 对比可另链接 `comparison.md`，Codec 对比链接对应报告。
+
+| 策略编号 | 策略文档 | 关键基线 | 关键候选 | 结论或备注 |
+| --- | --- | --- | --- | --- |
+| 暂无 | — | — | — | — |
+
+本表链接相对本 README：本策略内的摘要使用 `OPT-0001/<run-id>/summary.md`；策略文档使用 `../strategies/<策略目录>/strategy.md`。路径仅为填写形式，实际登记时替换为存在的目标。
