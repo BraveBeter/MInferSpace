@@ -30,6 +30,7 @@ class RuntimeTests(unittest.TestCase):
         smi.write_text(
             '#!/bin/sh\ncase "$1" in\n'
             "  --id=0) echo '0, GPU-SELECTED, 75, 1400, 1000';;\n"
+            "  --id=1) echo '1, GPU-SECOND, 68, 1350, 1000';;\n"
             '  --query-compute-apps=*) printf "%s" "$FIXTURE_APPS";;\n'
             '  *) exit 1;;\nesac\n'
         )
@@ -91,6 +92,25 @@ class RuntimeTests(unittest.TestCase):
         )
         self.assertEqual(code, 1)
         self.assertEqual(record["service_pids_on_other_gpus"], [{"uuid": "GPU-OTHER", "pid": 42}])
+
+    def test_two_idle_gpus_before_launch_pass(self):
+        self.write_deployment(gpu_count=2)
+        code, record = self.run_check("--gpu", "1")
+        self.assertEqual(code, 0, record)
+
+    def test_ready_service_missing_from_second_gpu_fails(self):
+        self.write_deployment(gpu_count=2)
+        code, record = self.run_check("--gpu", "1", "--allow-gpu-pid", "42", processes="GPU-SELECTED, 42")
+        self.assertEqual(code, 1, record)
+        self.assertIn("No service worker on GPU 1", record["error"])
+
+    def test_ready_service_on_both_gpus_passes(self):
+        self.write_deployment(gpu_count=2)
+        code, record = self.run_check(
+            "--gpu", "1", "--allow-gpu-pid", "42", "--allow-gpu-pid", "43",
+            processes="GPU-SELECTED, 42\nGPU-SECOND, 43",
+        )
+        self.assertEqual(code, 0, record)
 
 
 if __name__ == "__main__":

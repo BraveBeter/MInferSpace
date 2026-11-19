@@ -216,6 +216,9 @@ def gpu_snapshot(indices, evidence, allowed_pids):
     require(not unexpected, "Unexpected GPU compute PIDs: " + ", ".join(map(str, sorted(unexpected))))
     missing = allowed_pids - observed
     require(not missing, "Service PIDs absent from selected GPUs: " + ", ".join(map(str, sorted(missing))))
+    if allowed_pids:
+        for gpu in devices:
+            require(gpu["compute_pids"], f"No service worker on GPU {gpu['index']}")
 
 
 def index_arg(value):
@@ -233,7 +236,8 @@ def main():
     e2e.add_argument("--source", type=Path, required=True)
     e2e.add_argument("--launcher", type=Path, help="Python script used to launch the service, if any")
     e2e.add_argument("--gpu", type=index_arg, action="append", required=True)
-    e2e.add_argument("--allow-gpu-pid", type=index_arg, action="append", default=[])
+    e2e.add_argument("--allow-gpu-pid", type=index_arg, action="append", default=[],
+                     help="After startup, list each service worker PID. Every selected GPU must host one.")
     codec = modes.add_parser("codec")
     codec.add_argument("--config", type=Path, required=True)
     args = parser.parse_args()

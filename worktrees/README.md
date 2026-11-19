@@ -47,7 +47,15 @@ git -C benchmark-client rev-parse HEAD
 
 ```bash
 python3 -m venv envs/runtime/benchmark-client
-envs/runtime/benchmark-client/bin/python -m pip install ./benchmark-client
+envs/runtime/benchmark-client/bin/python -m pip install -e ./benchmark-client
+envs/runtime/benchmark-client/bin/python - <<'PY'
+from moss_speech_bench.storage import source_identity
+
+commit = source_identity()["commit"]
+if commit != "ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9":
+    raise SystemExit(f"评测客户端提交与固定版本不符：{commit}")
+print(f"评测客户端提交：{commit}")
+PY
 envs/runtime/benchmark-client/bin/moss-speech-bench --help
 ```
 

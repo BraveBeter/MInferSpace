@@ -43,9 +43,16 @@ CLI 的相对输出路径以执行命令时的工作目录为基准。客户端�
 
 - E2E 在服务进程实际启动所用的解释器、工作目录、环境变量和容器内执行。用 `python -m sglang_omni.cli serve` 启动时可直接使用下方检查命令。用 `sgl-omni` 等 Python 脚本启动时，把实际脚本路径传给 `--launcher`，并使用该脚本实际使用的解释器。启动前核对导入路径、commit、工作树状态和已声明的分支，检出为 detached HEAD 时分支填写空字符串。服务就绪后、正式测量前用同一上下文再次执行，只把确认属于本次服务的 GPU worker PID 逐个传给 `--allow-gpu-pid`。`--gpu` 为 `nvidia-smi` 中的物理卡号，多卡逐个传入。启动上下文或资源发生变化时重新采集。
 
+  启动前要求所有选中卡空闲。服务就绪后至少提供一个 worker PID，每张选中卡都须观察到本次服务的 worker。单卡示例：
+
   ```bash
   "$SERVER_PYTHON" "$WORKSPACE/scripts/check_runtime.py" --output-dir "$RUN_DIR" e2e \
     --deployment "$DEPLOYMENT" --source "$SERVER_CHECKOUT" --gpu "$GPU_INDEX"
+
+  # 服务就绪后
+  "$SERVER_PYTHON" "$WORKSPACE/scripts/check_runtime.py" --output-dir "$RUN_DIR" e2e \
+    --deployment "$DEPLOYMENT" --source "$SERVER_CHECKOUT" --gpu "$GPU_INDEX" \
+    --allow-gpu-pid "$WORKER_PID"
   ```
 
 - Codec 用配置指定的 `python` 运行检查，脚本读取配置里的 `physical_gpu`，并核对 `sg-native` 的干净源码 SHA 或 `hf-native` 的依赖源码路径，再核验配置中声明的资产哈希。GPU 应空闲。客户端继续负责完整运行契约、语料校验及 worker 中的实际加载检查。
