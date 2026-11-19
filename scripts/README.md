@@ -24,6 +24,6 @@
 
 阶段交付前运行 `python3 scripts/check_workspace.py`。脚本核对 Markdown 相对链接和索引；Git 忽略的本地产物通过随仓库保存的归档说明或 manifest 引用。检查使用工作树中的文档和文件，同时检查暂存变更的 blob 大小和文本凭据格式。
 
-超过 10 MiB 的文件会报告路径。文本凭据检查覆盖私钥头、GitHub 和 Slack token 的高置信度格式，报告路径、行号和类型。发现问题时退出码为 1。
+普通 Git 文件和暂存 blob 的上限为 10 MiB。通过 Git LFS 跟踪的文件可以在工作树中超过该上限，暂存区保存小型指针。文本凭据检查仍扫描已下载的文件，覆盖私钥头、GitHub 和 Slack token 的高置信度格式，报告路径、行号和类型。发现问题时退出码为 1。
 
 修改检查脚本后，在工作区根目录运行 `python3 -m unittest discover -s scripts/tests -v`。回归测试使用临时 Git 仓库和替身 GPU 遥测。

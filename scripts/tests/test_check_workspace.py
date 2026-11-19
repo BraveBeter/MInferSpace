@@ -55,6 +55,25 @@ class WorkspaceTests(unittest.TestCase):
         CHECKER.check_staged_files(self.root, lambda *problem: problems.append(problem))
         self.assertEqual(problems, [(path, 1, "possible credential (GitHub token)")])
 
+    def test_lfs_worktree_size_exception_still_checks_credentials_and_staged_size(self):
+        (self.root / ".gitattributes").write_text("/input.jsonl filter=lfs\n")
+        path = self.root / "input.jsonl"
+        path.write_bytes(b"x" * CHECKER.MAX_SIZE + b"\n" + b"ghp_" + b"x" * 36 + b"\n")
+        problems = []
+        report = lambda *problem: problems.append(problem)
+
+        self.assertTrue(CHECKER.scan_file(self.root, path, report))
+        self.assertEqual(problems, [(path, 2, "possible credential (GitHub token)")])
+
+        problems.clear()
+        subprocess.run(
+            ["git", "-C", str(self.root), "-c", "filter.lfs.process=", "-c", "filter.lfs.clean=",
+             "-c", "filter.lfs.required=false", "add", path.name],
+            check=True,
+        )
+        CHECKER.check_staged_files(self.root, report)
+        self.assertEqual(problems, [(path, None, "file exceeds 10 MiB")])
+
 
 if __name__ == "__main__":
     unittest.main()

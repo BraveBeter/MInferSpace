@@ -1,0 +1,2 @@
+/benchmark-results/*/*/inputs/*.jsonl filter=lfs diff=lfs merge=lfs -text
+/benchmark-results/*/*/warmup-inputs/*.jsonl filter=lfs diff=lfs merge=lfs -text

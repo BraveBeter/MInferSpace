@@ -302,15 +302,17 @@ def scan_credentials(path, stream, report):
                 report(path, line, f"possible credential ({kind})")
 
 
-def scan_file(path, report):
+def scan_file(root, path, report):
     try:
         if path.stat().st_size > MAX_SIZE:
-            report(path, None, "file exceeds 10 MiB")
-            return False
+            attributes = git_output(root, "check-attr", "-z", "filter", "--", path.relative_to(root))
+            if not attributes.endswith(b"\0lfs\0"):
+                report(path, None, "file exceeds 10 MiB")
+                return False
         with path.open("rb") as stream:
             scan_credentials(path, stream, report)
         return True
-    except OSError:
+    except (OSError, subprocess.CalledProcessError):
         report(path, None, "cannot scan file")
         return False
 
@@ -370,7 +372,7 @@ def main():
         if not path.resolve().is_relative_to(root):
             report(path, None, "workspace file resolves outside the workspace")
             continue
-        if scan_file(path, report) and path.suffix.lower() == ".md":
+        if scan_file(root, path, report) and path.suffix.lower() == ".md":
             try:
                 check_links(root, path, available, report)
             except (OSError, UnicodeError):

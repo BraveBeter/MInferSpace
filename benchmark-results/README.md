@@ -84,6 +84,18 @@ GPU 快照包含选定卡的 UUID、功耗、SM 和显存时钟、计算进程 P
 
 `summary.md` 会被报告命令重新生成，人工说明写在 `analysis/` 中，并链接原始证据。凭据通过外部环境传入，执行材料中保留所用变量名，不保存凭据值。
 
+## 归档与恢复 E2E 冻结输入
+
+冻结请求可能内嵌音频。`inputs/*.jsonl` 和 `warmup-inputs/*.jsonl` 通过仓库的 [Git LFS 规则](../.gitattributes) 跟踪，`summary.md` 继续链接原生路径。归档前在工作区根目录安装并启用 Git LFS（运行 `git lfs install --local`），再暂存运行材料并执行 [工作区检查](../scripts/README.md#工作区检查)。对已用普通 Git 跟踪的冻结输入，启用 LFS 后对这些路径运行 `git add --renormalize`。提交后运行 `git lfs fsck --objects HEAD` 核对对象，再用普通 `git push` 上传提交和 LFS 对象。
+
+从新克隆或切换到目标提交后，在工作区根目录运行以下命令，将原始 JSONL 恢复到报告链接指向的位置。恢复完成后即可运行客户端的报告或离线评分命令。
+
+```bash
+git lfs install --local
+git lfs pull
+git lfs fsck --objects HEAD
+```
+
 ## 基线复用与对比
 
 - 已有基线可跨策略引用，保留在其原目录；在策略文档和下方索引中链接该次运行，无需复制结果。重新测量才创建新目录。
