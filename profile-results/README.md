@@ -9,14 +9,14 @@
 ```text
 profile-results/
 ├── README.md
-└── 20261117T120000Z-opt0001-nsys-baseline/
+└── 20261117T120000Z-OPT-0001-nsys-baseline/
     ├── execution/       # 采集命令、配置、代码版本、环境和日志
     ├── traces/          # profiler 原始产物
     ├── exports/         # 按需导出的统计表、截图等
     └── analysis.md      # 本次采集的观察与分析
 ```
 
-运行目录使用 `UTC时间-优化编号-工具-baseline或candidate` 命名，例如 `20261117T120000Z-opt0001-nsys-baseline`。`nsys` 是工具示例，实际名称按所用 profiler 填写；优化编号对应关联策略。每次重新采集使用新目录，名称冲突时追加 `-02` 等后缀，保留已有产物。
+运行目录使用 `UTC时间-优化编号-工具-baseline或candidate` 命名，例如 `20261117T120000Z-OPT-0001-nsys-baseline`。`nsys` 是工具示例，实际名称按所用 profiler 填写；优化编号对应关联策略。每次重新采集使用新目录，名称冲突时追加 `-02` 等后缀，保留已有产物。
 
 目录按实际使用创建；没有导出材料时不必创建 `exports/`。
 
