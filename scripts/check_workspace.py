@@ -243,6 +243,45 @@ def check_status_index(root, path, header, columns, strategies, plan, report):
             report(path, None, f"missing index row for {number}")
 
 
+def check_profile_index(root, report):
+    path = root / "profile-results/README.md"
+    header = ("源码分支", "完整 commit", "采集目录", "工具", "用途")
+    seen = set()
+    for line, (branch, commit, directory, tool, _) in table_rows(path, header, report):
+        # Git forbids '~' in refs, which keeps slash escaping reversible.
+        branch = branch.replace(r"\|", "|")
+        try:
+            git_output(root, "check-ref-format", f"refs/heads/{branch}")
+        except subprocess.CalledProcessError:
+            report(path, line, "profile source branch must be a valid Git branch name")
+            continue
+        if not SHA.fullmatch(commit):
+            report(path, line, "profile commit must be a full Git SHA")
+            continue
+        try:
+            (target, anchor), = (local_link(root, path, url) for url in links(directory))
+        except (OSError, ValueError, RuntimeError):
+            target, anchor = None, ""
+        identity = f"{branch.replace('/', '~')}-{commit}"
+        if (
+            target is None
+            or anchor
+            or target.parent != path.parent / identity
+            or not target.is_dir()
+        ):
+            report(path, line, "profile directory link must match the source branch and full SHA")
+            continue
+        run_pattern = rf"[0-9]{{8}}T[0-9]{{6}}Z-{re.escape(tool)}(?:-[0-9]{{2,}})?"
+        if (
+            not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", tool)
+            or not re.fullmatch(run_pattern, target.name)
+        ):
+            report(path, line, "profile run ID must contain the UTC start time and tool name")
+        if target in seen:
+            report(path, line, "duplicate profile directory in index")
+        seen.add(target)
+
+
 def check_run_indexes(root, strategies, report):
     worktrees = root / "worktrees/README.md"
     seen_directories = set()
@@ -255,17 +294,6 @@ def check_run_indexes(root, strategies, report):
             if directory in seen_directories:
                 report(worktrees, line, "duplicate worktree directory in index")
             seen_directories.add(directory)
-    profiles = root / "profile-results/README.md"
-    seen_directories = set()
-    for line, (directory, _, _, number) in table_rows(profiles, ("采集目录", "工具", "用途", "关联策略"), report):
-        if strategy_reference(number, strategies, report, profiles, line):
-            destinations = tuple(links(directory))
-            name = Path(destinations[0]).name if len(destinations) == 1 else ""
-            if not re.match(rf"^[0-9]{{8}}T[0-9]{{6}}Z-{number}-", name):
-                report(profiles, line, "profile directory link must contain the matching strategy ID")
-            if name and name in seen_directories:
-                report(profiles, line, "duplicate profile directory in index")
-            seen_directories.add(name)
     benchmarks = root / "benchmark-results/README.md"
     seen = set()
     for line, (number, cell, *_run_links) in table_rows(
@@ -383,6 +411,7 @@ def main():
     check_baseline_index(registry, strategies, report)
     check_status_index(root, registry, STRATEGY_INDEX, (1, 3, 4), strategies, False, report)
     check_status_index(root, root / "PLAN.md", PLAN_INDEX, (3, 2, 4), strategies, True, report)
+    check_profile_index(root, report)
     check_run_indexes(root, strategies, report)
     for problem in dict.fromkeys(problems):
         print(problem, file=sys.stderr)

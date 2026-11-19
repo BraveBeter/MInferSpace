@@ -61,7 +61,7 @@ envs/runtime/benchmark-client/bin/moss-speech-bench --help
 
 ## 当前已有工作副本
 
-完成初始化后，`sglang-omni/baseline/` 是本地源码主克隆。下表用于登记实际创建的候选工作副本；新增、移除或推送后更新记录。
+完成初始化后，`sglang-omni/baseline/` 是本地源码主克隆。下表登记实际存在的候选工作副本和其远端引用。
 
 | 策略编号 | 本地目录 | 实现分支 | 远端引用 |
 | --- | --- | --- | --- |
@@ -79,11 +79,11 @@ envs/runtime/benchmark-client/bin/moss-speech-bench --help
 
 | 决定 | 结案时的资源处理 |
 | --- | --- |
-| `push` | 从登记的远端引用重新获取，确认已验收 commit 可取回后，再移除无其他用途的候选资源。 |
+| `push` | 从登记的远端引用重新获取，确认用户决定推送的受测 commit 可取回后，再移除无其他用途的候选资源。 |
 | `keep-local` | 保留指向最终 commit 的本地分支和复现所需的工作副本、环境及资产。 |
 | `discard` | 归档实验结论和证据后，移除无其他引用的候选 worktree、专用环境及可重建缓存。 |
 
-使用 `git worktree remove` 的默认检查移除干净的候选 worktree。共用环境、固定资产和作为基线或复现证据的提交按其引用保留。完成后更新工作副本登记，在策略中记录已执行的操作、保留项及原因。
+使用 `git worktree remove` 的默认检查移除干净的候选 worktree。共用环境、固定资产和作为基线或复现证据的提交按其引用保留。结案记录包含已执行的操作、保留项及原因。
 
 ## 本地文件系统适配
 

@@ -1,4 +1,4 @@
-"""Regression checks for relocatable Markdown links and staged scanning."""
+"""Regression checks for workspace links, profile indexing, and staged scanning."""
 
 import importlib.util
 from pathlib import Path
@@ -73,6 +73,65 @@ class WorkspaceTests(unittest.TestCase):
         )
         CHECKER.check_staged_files(self.root, report)
         self.assertEqual(problems, [(path, None, "file exceeds 10 MiB")])
+
+    def profile_run(self, commit, run_id="20261117T120000Z-nsys"):
+        profiles = self.root / "profile-results"
+        relative = Path(f"fix~example-{commit}") / run_id
+        run = profiles / relative
+        run.mkdir(parents=True)
+        (run / "analysis.md").write_text("# Profile evidence\n")
+        return relative.as_posix()
+
+    def check_profiles(self, *rows):
+        index = self.root / "profile-results/README.md"
+        index.write_text(
+            "| 源码分支 | 完整 commit | 采集目录 | 工具 | 用途 |\n"
+            "| --- | --- | --- | --- | --- |\n"
+            + "".join(
+                f"| {branch} | {commit} | [采集]({directory}/) | nsys | Exploration |\n"
+                for branch, commit, directory in rows
+            )
+        )
+        problems = []
+        CHECKER.check_profile_index(self.root, lambda *problem: problems.append(problem))
+        return [message for _, _, message in problems]
+
+    def test_profiles_without_strategies_allow_same_branch_and_run_id_at_multiple_shas(self):
+        commits = ["a" * 40, "b" * 40]
+        rows = [("fix/example", commit, self.profile_run(commit)) for commit in commits]
+        self.assertEqual(self.check_profiles(*rows), [])
+
+    def test_profile_directory_must_match_branch_and_full_commit(self):
+        commit = "a" * 40
+        directory = self.profile_run(commit)
+        self.assertEqual(
+            self.check_profiles(
+                ("fix/other", commit, directory),
+                ("fix/example", "b" * 40, directory),
+                ("fix/example", commit[:8], directory),
+            ),
+            [
+                "profile directory link must match the source branch and full SHA",
+                "profile directory link must match the source branch and full SHA",
+                "profile commit must be a full Git SHA",
+            ],
+        )
+
+    def test_profile_run_id_and_duplicate_directory(self):
+        commit = "a" * 40
+        good = self.profile_run(commit, "20261117T120000Z-nsys-02")
+        wrong_tool = self.profile_run(commit, "20261117T120000Z-perf")
+        self.assertEqual(
+            self.check_profiles(
+                ("fix/example", commit, good),
+                ("fix/example", commit, "./" + good),
+                ("fix/example", commit, wrong_tool),
+            ),
+            [
+                "duplicate profile directory in index",
+                "profile run ID must contain the UTC start time and tool name",
+            ],
+        )
 
 
 if __name__ == "__main__":
