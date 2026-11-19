@@ -1,6 +1,6 @@
 # Benchmark 结果
 
-这里保存统一评测客户端的运行结果，按“策略 → 每次运行”分组。每次运行目录内的产物沿用 [benchmark-client 的原生约定](../benchmark-client/README.md)。
+这里保存统一评测客户端的运行结果，按“策略 → 每次运行”分组。每次运行目录内的产物沿用 [benchmark-client 的原生约定](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/README.md)。
 
 ## 组织与命名
 
@@ -53,7 +53,7 @@ CLI 的相对输出路径以执行命令时的工作目录为基准。客户端�
 | `execution/` | 执行命令、配置、环境和日志；Codec 也在这里生成执行材料 |
 | `analysis/` | 运行建立后的人工详细分析或客户端生成的分析产物 |
 
-工作区不另行要求 `run.yaml`、`metrics.json` 或每次运行的 README。被测服务身份按客户端支持的方式提供：E2E 使用 `--deployment`，格式参考 [deployment 示例](../benchmark-client/examples/deployment.example.json)；Codec 按其配置记录身份。实际服务进程加载的代码应与所填身份一致。
+工作区不另行要求 `run.yaml`、`metrics.json` 或每次运行的 README。被测服务身份按客户端支持的方式提供：E2E 使用 `--deployment`，格式参考 [deployment 示例](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/examples/deployment.example.json)；Codec 按其配置记录身份。实际服务进程加载的代码应与所填身份一致。
 
 `summary.md` 会被报告命令重新生成，人工说明写在 `analysis/` 中，并链接原始证据。凭据通过外部环境传入，执行材料中保留所用变量名，不保存凭据值。
 
@@ -62,7 +62,7 @@ CLI 的相对输出路径以执行命令时的工作目录为基准。客户端�
 - 已有基线可跨策略引用，保留在其原目录；在策略文档和下方索引中链接该次运行，无需复制结果。重新测量才创建新目录。
 - E2E 候选优先通过 `--selection` 复用基线的 `selection.json`。数据、生成参数和客户端指标实现等可比条件按原生契约检查，不以目录名相同代替可比性验证。
 - E2E 对比使用 `e2e report --output-dir <候选目录> --baseline <基线目录>`，客户端在候选目录生成 `comparison.md` 和 `comparison.json`。
-- Codec 的样本范围、评分和对比遵循 [Codec 协议](../benchmark-client/CODEC_ONLY.md)。Codec 不支持隐式恢复；使用比较配置生成的汇总报告另放在同一策略下的新目录，例如 `20261119T100000Z-codec-comparison/`。该目录是对比报告，不登记为新的推理运行。
+- Codec 的样本范围、评分和对比遵循 [Codec 协议](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/CODEC_ONLY.md)。Codec 不支持隐式恢复；使用比较配置生成的汇总报告另放在同一策略下的新目录，例如 `20261119T100000Z-codec-comparison/`。该目录是对比报告，不登记为新的推理运行。
 - 失败、中断、预算耗尽和未评分的结果继续保留；状态以客户端记录为准。正式 benchmark 与 profile 分开运行。
 
 ## 策略索引

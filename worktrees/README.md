@@ -19,21 +19,41 @@ worktrees/
 
 本目录下的本地路径均相对 `worktrees/`。`xxx` 是优化内容的简短名称。基线起点需要记录完整 commit；创建优化分支时从该 commit 出发，不以可能移动的远端分支名代替固定起点。
 
-## 当前已有仓库与工作副本
+## 初始化依赖
 
-下表只登记实际创建的仓库与工作副本；上方的优化目录是后续组织形式示例。新增、移除或推送工作副本后，更新下表。
+两个依赖各自保留 Git 历史。以下命令从 `opt-loop` 根目录执行，使用已有的 GitHub SSH 访问权限。已有检出时，先确认远端、当前 commit 和工作树状态，再决定是否切换版本。
 
-| 仓库 / 工作副本 | 用途 | 本地目录 | 对应远端仓库及分支 |
-| :---- | :---- | :---- | :---- |
-| sglang-omni / baseline | moss-speech 优化的源码起点及基线对照 | `sglang-omni/baseline/` | [BraveBeter/sglang-omni](https://github.com/BraveBeter/sglang-omni)，分支 `fix/moss-speech-all-modalities-review-20261111` |
+```bash
+git clone --branch fix/moss-speech-all-modalities-review-20261111 --single-branch --no-checkout \
+  git@github.com:BraveBeter/sglang-omni.git worktrees/sglang-omni/baseline
+git -C worktrees/sglang-omni/baseline switch --detach f4cef25c0f6809483224913300d82358abc701d7
+git -C worktrees/sglang-omni/baseline rev-parse HEAD
+
+git clone --branch main --single-branch --no-checkout \
+  git@github.com:BraveBeter/moss-speech-benchmark.git benchmark-client
+git -C benchmark-client switch --detach ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9
+git -C benchmark-client rev-parse HEAD
+```
+
+确认两条 `rev-parse` 的输出分别等于上方的固定 commit。获取分支用于下载提交历史，实际运行使用固定 commit；获取或核对失败时先解决依赖问题，再运行评测。
+
+评测客户端需要 Python 3.10 或以上。使用选定解释器在独立环境验证 CLI；以下命令同样从工作区根目录执行。
+
+```bash
+python3 -m venv envs/runtime/benchmark-client
+envs/runtime/benchmark-client/bin/python -m pip install ./benchmark-client
+envs/runtime/benchmark-client/bin/moss-speech-bench --help
+```
+
+## 当前已有工作副本
+
+完成初始化后，`sglang-omni/baseline/` 是本地源码主克隆。下表用于登记实际创建的候选工作副本；新增、移除或推送后更新记录。
+
+| 策略编号 | 本地目录 | 实现分支 | 远端引用 |
+| --- | --- | --- | --- |
+| 暂无 | — | — | — |
 
 ## 固定的 baseline 起点
-
-- 本地目录：`sglang-omni/baseline/`。
-- `origin`：`https://github.com/BraveBeter/sglang-omni.git`。
-- 本地分支：`fix/moss-speech-all-modalities-review-20261111`。
-- 跟踪分支：`origin/fix/moss-speech-all-modalities-review-20261111`。
-- 完整 commit：[`f4cef25c0f6809483224913300d82358abc701d7`](https://github.com/BraveBeter/sglang-omni/commit/f4cef25c0f6809483224913300d82358abc701d7)。
 
 这里记录的是源码优化起点，性能基线仍需后续统一评测确定。优化工作副本从上述固定 commit 创建，基线工作副本保留用于对照。远端分支后续可能更新，不能用其最新位置替换这次记录的起点。
 

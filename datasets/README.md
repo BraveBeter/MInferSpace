@@ -26,15 +26,15 @@ datasets/
 
 ### OpenAudioBench：E2E
 
-包含 LLaMA Questions、TriviaQA、WebQuestions。使用客户端支持的原始 CSV 与对应音频，E2E 配置中的 `source` 指向 CSV，`audio_root` 指向相应音频目录，并提供固定 `revision`。配置格式见 [E2E 示例](../benchmark-client/examples/e2e.json)。
+包含 LLaMA Questions、TriviaQA、WebQuestions。使用客户端支持的原始 CSV 与对应音频，E2E 配置中的 `source` 指向 CSV，`audio_root` 指向相应音频目录，并提供固定 `revision`。配置格式见 [E2E 示例](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/examples/e2e.json)。
 
-样本字段和数量校验沿用 [客户端协议](../benchmark-client/README.md)。每次运行由客户端生成 `selection.json`，保存在 `benchmark-results/<策略编号>/<run-id>/`；候选评测可以引用该清单复用选样。
+样本字段和数量校验沿用 [客户端协议](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/README.md)。每次运行由客户端生成 `selection.json`，保存在 `benchmark-results/<策略编号>/<run-id>/`；候选评测可以引用该清单复用选样。
 
 ### Seed-TTS-Eval：Codec
 
 保存完整 EN1088、ZH2020 数据，共 3108 对 target/prompt，以及客户端要求的 `corpus.jsonl`。每条清单记录样本 ID、语言、文本、target/prompt 音频路径及对应 SHA-256；音频路径相对 `corpus.jsonl` 所在目录。
 
-Codec 配置通过 `corpus` 引用清单，并记录 corpus 的固定 revision 和整个 JSONL 的 SHA-256。字段、完整性要求和配置格式以 [Codec 协议](../benchmark-client/CODEC_ONLY.md) 与 [配置示例](../benchmark-client/examples/codec.json) 为准。
+Codec 配置通过 `corpus` 引用清单，并记录 corpus 的固定 revision 和整个 JSONL 的 SHA-256。字段、完整性要求和配置格式以 [Codec 协议](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/CODEC_ONLY.md) 与 [配置示例](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/examples/codec.json) 为准。
 
 ## 数据登记
 

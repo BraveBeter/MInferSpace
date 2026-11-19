@@ -29,11 +29,11 @@ configs/
 
 | 配置文件 | 用途 | 使用工具及调用参数 | 客户端格式参考 |
 | --- | --- | --- | --- |
-| `benchmark/e2e.json` | E2E 数据和服务能力等配置 | `moss-speech-bench e2e run --config` | [e2e.json](../benchmark-client/examples/e2e.json) |
-| `benchmark/codec.json` | Codec 数据、模型、环境和设备等配置 | `moss-speech-bench codec run --config` | [codec.json](../benchmark-client/examples/codec.json) |
-| `benchmark/scoring.json` | E2E 离线质量评分配置 | `moss-speech-bench e2e score --score-config` | [scoring.json](../benchmark-client/examples/scoring.json) |
-| `benchmark/codec-scoring.json` | Codec 离线质量评分配置 | `moss-speech-bench codec score --score-config` | [codec-scoring.json](../benchmark-client/examples/codec-scoring.json) |
-| `benchmark/deployment.json` | 被测服务的代码身份与部署条件，作为评测元数据 | `moss-speech-bench e2e run --deployment` | [deployment.example.json](../benchmark-client/examples/deployment.example.json) |
+| `benchmark/e2e.json` | E2E 数据和服务能力等配置 | `moss-speech-bench e2e run --config` | [e2e.json](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/examples/e2e.json) |
+| `benchmark/codec.json` | Codec 数据、模型、环境和设备等配置 | `moss-speech-bench codec run --config` | [codec.json](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/examples/codec.json) |
+| `benchmark/scoring.json` | E2E 离线质量评分配置 | `moss-speech-bench e2e score --score-config` | [scoring.json](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/examples/scoring.json) |
+| `benchmark/codec-scoring.json` | Codec 离线质量评分配置 | `moss-speech-bench codec score --score-config` | [codec-scoring.json](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/examples/codec-scoring.json) |
+| `benchmark/deployment.json` | 被测服务的代码身份与部署条件，作为评测元数据 | `moss-speech-bench e2e run --deployment` | [deployment.example.json](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/examples/deployment.example.json) |
 
 `deployment.json` 用于向客户端提供服务身份与条件，服务的实际启动配置放在 `server/`。
 

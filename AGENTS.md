@@ -14,7 +14,7 @@
 ## 代码开发要求
 
 - 修改源码前，必须阅读并遵循对应仓库的 `AGENTS.md` 和 `README.md`。  
-- 修改源码前，必须阅读并遵循 sglang-omni 的[开发者参考规范](worktrees/sglang-omni/baseline/docs/developer_reference/)。  
+- 修改源码前，必须阅读并遵循 sglang-omni 的[开发者参考规范](https://github.com/BraveBeter/sglang-omni/tree/f4cef25c0f6809483224913300d82358abc701d7/docs/developer_reference)。
 - 管理源码、基线和优化工作副本时，必须遵循 [worktrees/README.md](worktrees/README.md)。  
 - 实现范围围绕当前策略，避免混入无关修改。  
 - 必须遵循最小改动原则，确保每个改动都是必要的，且范围最小。
@@ -32,7 +32,7 @@
 ## Profile 与评测要求
 
 - 执行 profile 和管理采集结果时，必须遵循 [profile-results/README.md](profile-results/README.md)。  
-- 评测执行、输入协议、指标和比较契约，必须遵循 [benchmark-client/README.md](benchmark-client/README.md)。  
+- 评测执行、输入协议、指标和比较契约，必须遵循 [benchmark-client/README.md](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/README.md)。
 - 管理评测目录、结果索引和基线引用时，必须遵循 [benchmark-results/README.md](benchmark-results/README.md)。  
 - 正式性能结论须来自统一 benchmark，profile 用于定位和验证瓶颈。  
 - 实验结论须链接对应代码版本、运行记录和比较证据。
