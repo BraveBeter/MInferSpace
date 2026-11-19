@@ -42,11 +42,13 @@ strategies/
 
 “策略简述”用一两句话说明优化对象和核心方法，方便直接了解该策略准备做什么；目标与最终实测收益分别记录在策略正文和结果中。
 
-状态沿用 `planned`、`profiling`、`implementing`、`benchmarking`、`decided`、`blocked`、`cancelled`，表示工作进展。最终决定单独记录为 `push`、`keep-local` 或 `discard`，并注明是否已经执行。
+状态沿用 `planned`、`profiling`、`implementing`、`benchmarking`、`decided`、`blocked`、`cancelled`。最终决定使用 `push`、`keep-local` 或 `discard`；执行状态使用 `pending` 或 `executed`。未形成决定时，两个字段均填 `—`。完成初始基线归档也可使用 `keep-local`。
 
 ## strategy.md 内容
 
-每项策略按以下内容组织：
+建档时复制 [策略模板](_template.md)。保留顶部字段名，使用完整起点 commit；叠加策略填写前置策略编号，独立实验或初始基线填 `—`。状态在 `strategy.md`、本索引和 `PLAN.md` 的单元格使用同一状态值，具体进展写在策略正文。模板仅供复制。
+
+每项策略沿用以下六节：
 
 1. **优化目标及起点**：目标场景和指标，源码路径、起点分支与完整 commit、候选分支及 worktree、模型与数据和环境引用、基线评测链接。
 2. **瓶颈证据**：关联 profile 记录及关键观察，说明当前假设与依据，区分事实和推断。
@@ -59,6 +61,6 @@ strategies/
 
 ## 与 PLAN.md 的关系
 
-[PLAN.md](../PLAN.md) 仅保留一张表，列为“策略编号、策略简述、状态进度、引用 strategy.md、起点 commit”，每项尚未完全验收的策略一行。引用使用指向实际策略文档的相对链接，起点记录完整 commit。
+[PLAN.md](../PLAN.md) 仅保留一张表，列为“策略编号、策略简述、状态进度、引用 strategy.md、起点 commit”，每项尚未结案的策略一行。引用使用指向实际策略文档的相对链接，起点记录完整 commit。
 
-策略实现、评测并完全验收后，从 PLAN.md 删除对应行；没有待验收策略时仅保留表头和分隔行。详细历史和最终结论继续保存在本目录的策略文档及索引中。PLAN.md 不另写标题、说明或任务清单。
+状态为 `cancelled`，或状态为 `decided` 且执行状态为 `executed` 时，从 PLAN.md 删除对应行；仍待执行的决定继续保留。没有待结案策略时仅保留表头和分隔行。详细历史和最终结论继续保存在策略文档及索引中。PLAN.md 保持单表格式。
