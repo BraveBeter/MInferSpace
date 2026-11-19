@@ -65,6 +65,18 @@ envs/runtime/benchmark-client/bin/moss-speech-bench --help
 
 `baseline/` 内的 Git 元数据由同项目的优化 worktree 共享，需要持续保留；优化 worktree 的移除使用 `git worktree remove`。
 
+## 策略结案与资源清理
+
+先归档策略结论、受测 commit、执行材料和相关评测链接。核对 `git status --short`、其他策略和基线登记的引用、环境及缓存的共享情况。遇到未提交改动或仍被引用的资源时，保留对应资源并记录原因。
+
+| 决定 | 结案时的资源处理 |
+| --- | --- |
+| `push` | 从登记的远端引用重新获取，确认已验收 commit 可取回后，再移除无其他用途的候选资源。 |
+| `keep-local` | 保留指向最终 commit 的本地分支和复现所需的工作副本、环境及资产。 |
+| `discard` | 归档实验结论和证据后，移除无其他引用的候选 worktree、专用环境及可重建缓存。 |
+
+使用 `git worktree remove` 的默认检查移除干净的候选 worktree。共用环境、固定资产和作为基线或复现证据的提交按其引用保留。完成后更新工作副本登记，在策略中记录已执行的操作、保留项及原因。
+
 ## 本地文件系统适配
 
 本次检出后，部分脚本出现 `100755 → 100644` 的执行位差异，文件内容与提交一致。已在该仓库的本地 Git 配置中设置 `core.filemode=false`，忽略挂载目录的执行位差异。该设置只影响本地 Git 对权限变化的判断，不恢复文件的执行权限；运行脚本时可显式使用 `bash script.sh` 或 `python script.py`。

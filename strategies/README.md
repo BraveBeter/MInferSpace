@@ -44,6 +44,8 @@ strategies/
 
 状态沿用 `planned`、`profiling`、`implementing`、`benchmarking`、`decided`、`blocked`、`cancelled`。最终决定使用 `push`、`keep-local` 或 `discard`；执行状态使用 `pending` 或 `executed`。未形成决定时，两个字段均填 `—`。完成初始基线归档也可使用 `keep-local`。
 
+执行最终决定时按 [资源清理约定](../worktrees/README.md#策略结案与资源清理) 处理候选 worktree、环境及缓存，并在最终结论中记录结果。
+
 ## strategy.md 内容
 
 建档时复制 [策略模板](_template.md)。保留顶部字段名，使用完整起点 commit；叠加策略填写前置策略编号，独立实验或初始基线填 `—`。状态在 `strategy.md`、本索引和 `PLAN.md` 的单元格使用同一状态值，具体进展写在策略正文。模板仅供复制。
