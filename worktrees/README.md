@@ -17,7 +17,13 @@ worktrees/
 
 `baseline/` 通过 `git clone` 创建，其他优化工作副本通过该仓库的 `git worktree` 创建。各工作副本拥有独立的源码文件和分支，共享 Git 提交历史，不再单独设置 `repos/`。
 
-本目录下的本地路径均相对 `worktrees/`。`xxx` 是优化内容的简短名称。基线起点需要记录完整 commit；创建优化分支时从该 commit 出发，不以可能移动的远端分支名代替固定起点。
+本目录下的本地路径均相对 `worktrees/`。`xxx` 是优化内容的简短名称。从策略记录的完整起点 commit 创建优化分支，例如从工作区根目录执行：
+
+```bash
+git -C worktrees/sglang-omni/baseline worktree add -b opt-0001-xxx ../opt-0001-xxx <起点-SHA>
+```
+
+将 `<起点-SHA>` 替换为实际值。起点选择遵循 [基线推进规则](../strategies/README.md#基线推进)。
 
 ## 初始化依赖
 
@@ -55,7 +61,7 @@ envs/runtime/benchmark-client/bin/moss-speech-bench --help
 
 ## 固定的 baseline 起点
 
-这里记录的是源码优化起点，性能基线仍需后续统一评测确定。优化工作副本从上述固定 commit 创建，基线工作副本保留用于对照。远端分支后续可能更新，不能用其最新位置替换这次记录的起点。
+初始化源码 commit 是 `OPT-0000` 的固定起点，其性能锚点由首次统一评测建立。主克隆保留该检出用于初始对照；对后续基线需要独立运行时，从相应策略的起点 commit 创建工作副本。
 
 `baseline/` 内的 Git 元数据由同项目的优化 worktree 共享，需要持续保留；优化 worktree 的移除使用 `git worktree remove`。
 

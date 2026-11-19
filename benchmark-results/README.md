@@ -62,7 +62,9 @@ CLI 的相对输出路径以执行命令时的工作目录为基准。客户端�
 - 已有基线可跨策略引用，保留在其原目录；在策略文档和下方索引中链接该次运行，无需复制结果。重新测量才创建新目录。
 - E2E 候选优先通过 `--selection` 复用基线的 `selection.json`。数据、生成参数和客户端指标实现等可比条件按原生契约检查，不以目录名相同代替可比性验证。
 - E2E 对比使用 `e2e report --output-dir <候选目录> --baseline <基线目录>`，客户端在候选目录生成 `comparison.md` 和 `comparison.json`。
+- 同一 E2E 候选需要做父基线和初始锚点比较时，分别执行报告命令。每次报告后将两份 `comparison.*` 保存到候选运行的 `analysis/parent/` 或 `analysis/anchor/`，再生成下一次报告。策略文档链接归档副本。
 - Codec 的样本范围、评分和对比遵循 [Codec 协议](https://github.com/BraveBeter/moss-speech-benchmark/blob/ce69ea7a1620b5d6bb93d5675aa3991f1e90b8a9/CODEC_ONLY.md)。Codec 不支持隐式恢复；使用比较配置生成的汇总报告另放在同一策略下的新目录，例如 `20261119T100000Z-codec-comparison/`。该目录是对比报告，不登记为新的推理运行。
+- 如果客户端契约或运行条件不满足可比性，记录差异，并在可比条件下重新测量涉及的版本。原运行继续保留，累计收益仍引用同一初始源码锚点。
 - 失败、中断、预算耗尽和未评分的结果继续保留；状态以客户端记录为准。正式 benchmark 与 profile 分开运行。
 
 ## 策略索引
