@@ -1,4 +1,4 @@
-# 独立源码仓库；保留 worktrees/README.md
+# 独立源码仓库与外部客户端；保留 worktrees/README.md
 /benchmark-client/
 /worktrees/*/
 
@@ -15,7 +15,7 @@ __pycache__/
 .cache/
 /benchmark-results/**/execution/hf-modules-cache/
 
-# 模型权重及二进制产物；配置、来源和准备脚本仍可跟踪
+# 模型权重、张量及二进制产物；配置、来源、清单和准备脚本仍可跟踪
 *.safetensors
 *.bin
 *.pt
@@ -23,6 +23,8 @@ __pycache__/
 *.ckpt
 *.onnx
 *.gguf
+*.npy
+*.npz
 
 # 原始及生成音频；CSV、corpus 和 selection 等清单仍可跟踪
 *.wav
@@ -63,3 +65,5 @@ __pycache__/
 /benchmark-results/**/logs/*.log
 /profile-results/**/execution/*.log
 /profile-results/**/logs/*.log
+/validation-results/**/execution/*.log
+/validation-results/**/logs/*.log
