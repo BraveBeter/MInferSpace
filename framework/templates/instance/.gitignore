@@ -1,0 +1,64 @@
+# 独立源码仓库；保留 worktrees/README.md
+/worktrees/*/
+
+# 本地虚拟环境、缓存与临时文件；保留环境定义与快照
+/envs/runtime/
+/.venv*/
+/tmp/*
+!/tmp/README.md
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.cache/
+
+# 模型权重、张量与大型二进制产物；配置、清单与准备脚本仍可跟踪
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.gguf
+*.npy
+*.npz
+
+# 原始及生成音频；清单与统计文件仍可跟踪
+*.wav
+*.flac
+*.mp3
+*.ogg
+*.opus
+*.m4a
+*.pcm
+
+# 压缩包
+/checkpoints/**/*.zip
+/checkpoints/**/*.tar*
+/checkpoints/**/*.tgz
+/datasets/**/*.zip
+/datasets/**/*.tar*
+/datasets/**/*.tgz
+
+# 按项目评测客户端需要，在实例 .gitignore 中补充客户端原始事件等大产物忽略规则
+
+# Profiler 原生产物；保留 traces 内的说明与归档元数据
+/profile-results/**/traces/**
+!/profile-results/**/traces/**/
+!/profile-results/**/traces/**/*.md
+!/profile-results/**/traces/**/artifacts.yaml
+!/profile-results/**/traces/**/manifest.json
+/profile-results/**/*.nsys-rep
+/profile-results/**/*.ncu-rep
+/profile-results/**/*.qdrep
+/profile-results/**/*.qdstrm
+/profile-results/**/*.pt.trace.json
+/profile-results/**/*.pt.trace.json.gz
+
+# 明确位置的运行日志
+/benchmark-results/**/execution/*.log
+/benchmark-results/**/logs/*.log
+/profile-results/**/execution/*.log
+/profile-results/**/logs/*.log
+/validation-results/**/execution/*.log
+/validation-results/**/logs/*.log
