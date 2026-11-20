@@ -1,11 +1,9 @@
-# 独立源码仓库与外部客户端；保留 worktrees/README.md
-/benchmark-client/
+# 独立源码仓库；保留 worktrees/README.md
 /worktrees/*/
 
-# 实际虚拟环境、缓存和临时文件；保留环境定义及快照
+# 本地虚拟环境、缓存与临时文件；保留环境定义与快照
 /envs/runtime/
 /.venv*/
-# 保留临时目录的使用说明
 /tmp/*
 !/tmp/README.md
 __pycache__/
@@ -13,9 +11,8 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 .cache/
-/benchmark-results/**/execution/hf-modules-cache/
 
-# 模型权重、张量及二进制产物；配置、来源、清单和准备脚本仍可跟踪
+# 模型权重、张量与大型二进制产物；配置、清单与准备脚本仍可跟踪
 *.safetensors
 *.bin
 *.pt
@@ -26,7 +23,7 @@ __pycache__/
 *.npy
 *.npz
 
-# 原始及生成音频；CSV、corpus 和 selection 等清单仍可跟踪
+# 原始及生成音频；清单与统计文件仍可跟踪
 *.wav
 *.flac
 *.mp3
@@ -35,7 +32,7 @@ __pycache__/
 *.m4a
 *.pcm
 
-# 下载的模型及数据压缩包
+# 压缩包
 /checkpoints/**/*.zip
 /checkpoints/**/*.tar*
 /checkpoints/**/*.tgz
@@ -43,11 +40,9 @@ __pycache__/
 /datasets/**/*.tar*
 /datasets/**/*.tgz
 
-# 原始流式事件与 Codec codes；保留 manifest、选样及聚合记录
-/benchmark-results/**/*.events.jsonl
-/benchmark-results/**/codes/*.json
+# 按项目评测客户端需要，在实例 .gitignore 中补充客户端原始事件等大产物忽略规则
 
-# Profiler 原生产物；保留 traces 内的说明和归档元数据
+# Profiler 原生产物；保留 traces 内的说明与归档元数据
 /profile-results/**/traces/**
 !/profile-results/**/traces/**/
 !/profile-results/**/traces/**/*.md
@@ -60,7 +55,7 @@ __pycache__/
 /profile-results/**/*.pt.trace.json
 /profile-results/**/*.pt.trace.json.gz
 
-# 明确位置的运行日志；不全局忽略日志及分析材料
+# 明确位置的运行日志
 /benchmark-results/**/execution/*.log
 /benchmark-results/**/logs/*.log
 /profile-results/**/execution/*.log

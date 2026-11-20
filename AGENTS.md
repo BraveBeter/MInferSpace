@@ -1,6 +1,6 @@
 # 工作区入口
 
-本工作区基于 [SG Model Workspace Framework](framework/README.md)（v0.1.0），用于 **moss-speech on sglang-omni** 的适配、优化与评测。项目事实见 [PROJECT.md](PROJECT.md)。
+本工作区基于 [SG Model Workspace Framework](framework/README.md)（v0.1.0），项目事实见 [PROJECT.md](PROJECT.md)。
 
 ## 每次会话必读
 
@@ -19,7 +19,7 @@
 | 技术调研 | [framework/workflows/research.md](framework/workflows/research.md) |
 | 环境、资产、源码、评测、profile、正确性、审查、交付、复盘 | [framework/workflows/shared/](framework/workflows/shared/) 对应子流程 |
 | 同步文档 | [framework/conventions/doc-sync-matrix.md](framework/conventions/doc-sync-matrix.md) |
-| 修改 sglang-omni 源码前 | 目标仓库的 `AGENTS.md`、`README.md`、`CONTRIBUTING` 及 [PROJECT.md](PROJECT.md#模型与源码) 所列开发者规范 |
+| 修改目标源码仓库前 | 目标仓库的 `AGENTS.md`、`README.md`、`CONTRIBUTING` 及 [PROJECT.md](PROJECT.md) 所列开发者规范 |
 
 ## 硬性规则
 

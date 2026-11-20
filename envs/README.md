@@ -2,8 +2,6 @@
 
 通用规则见 [env-setup.md](../framework/workflows/shared/env-setup.md)。本表路径相对 `envs/`。
 
-按实际需求准备推理服务（`sglang-omni`）、评测客户端（`moss-speech-bench`）与离线评分环境。
-
 ## 已登记环境
 
 <!-- ws:envs:begin -->

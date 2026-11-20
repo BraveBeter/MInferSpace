@@ -1,6 +1,6 @@
 # 工作区辅助脚本
 
-通用规则见 [layout.md](../framework/conventions/layout.md#scripts)。框架级通用工具见 [framework/tools/README.md](../framework/tools/README.md)。本表路径相对 `scripts/`。
+通用规则见 [layout.md](../framework/conventions/layout.md#scripts)。本表路径相对 `scripts/`。
 
 ## 脚本登记
 
